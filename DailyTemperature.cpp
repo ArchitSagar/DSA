@@ -3,41 +3,35 @@
 
 using namespace std;
 
-vector<int> dailyTemperatures(vector<int>& temp) {
-        stack<pair<int,int>> n;
-        pair<int,int> val;
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temp) {
         int s = temp.size();
-        vector<int> ans(s,0);
-        for(int i = temp.size()-1;i >= 0;i--){
+        vector<int> ans(s, 0);
+        stack<int> n;
 
-            while(true){
-                
-                if(n.empty()){
-                    n.push({temp[i],i});
-                    ans[i] = 0;
-                    break;
-                }
-                val = n.top();
-                if(temp[i] >= val.first){
-                    n.pop();
-                }
-                else{
-                    ans[i] = val.second - i;
-                    n.push({temp[i],i});
-                    break;  
-                }
-
+        for (int i = s - 1; i >= 0; --i) {
+            while (!n.empty() && temp[i] >= temp[n.top()]) {
+                n.pop();
             }
+            if (!n.empty()) {
+                ans[i] = n.top() - i;
+            }
+            n.push(i);
         }
+
         return ans;
     }
+};
+
 
 int main()
 {
+    Solution sol;
     vector<int> temp = {73,74,75,71,69,72,76,73};
     vector<int> ans;
     
-    ans = dailyTemperatures(temp);
+    ans = sol.dailyTemperatures(temp);
     
     for(auto it : ans){
         cout << it << " ";
